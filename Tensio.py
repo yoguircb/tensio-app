@@ -273,6 +273,16 @@ if en_bloque_valido and meta_temp:
     lista_probetas.append(meta_temp.copy())
 
 df_meta = pd.DataFrame(lista_probetas)
+# === CÓDIGO DE COMPATIBILIDAD UNIVERSAL (INSTRON + CSV PUROS) ===
+# Si el archivo es un CSV limpio (no tiene el formato de Instron), 
+# inyectamos todo el texto crudo en __RAW_DATA__
+if '__RAW_DATA__' not in df_meta.columns or df_meta.empty:
+    df_meta = pd.DataFrame({
+        'ID_Muestra': ['Probeta_Validacion'],
+        '__RAW_DATA__': [content]
+    })
+# ================================================================
+
 cols_orden = ['ID_Muestra'] + [c for c in df_meta.columns if c != 'ID_Muestra' and c != '__RAW_DATA__']
 #ESTO LE VOY A CAMBIAR df_meta = df_meta[cols_orden + ['__RAW_DATA__']]
 # --- CÓDIGO SEGURO ANTI-ERRORES ---
