@@ -290,7 +290,17 @@ st.divider()
 # ==========================================
 st.subheader("1. Selección de Muestras")
 probetas_a_procesar = []
+#OTRO CAMBIO SOLICITADO ids = df_meta['ID_Muestra'].tolist()
+# --- CÓDIGO SEGURO ANTI-ERRORES PARA IDs ---
+if 'ID_Muestra' not in df_meta.columns:
+    # Si el archivo es un CSV puro sin metadata, creamos una probeta genérica
+    if df_meta.empty:
+        df_meta = pd.DataFrame({'ID_Muestra': ['Probeta_Validacion']})
+    else:
+        df_meta['ID_Muestra'] = [f"Probeta {i+1}" for i in range(len(df_meta))]
+
 ids = df_meta['ID_Muestra'].tolist()
+# -------------------------------------------
 with st.container():
     cols_p = st.columns(4)
     for i, pid in enumerate(ids):
