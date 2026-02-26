@@ -274,7 +274,14 @@ if en_bloque_valido and meta_temp:
 
 df_meta = pd.DataFrame(lista_probetas)
 cols_orden = ['ID_Muestra'] + [c for c in df_meta.columns if c != 'ID_Muestra' and c != '__RAW_DATA__']
-df_meta = df_meta[cols_orden + ['__RAW_DATA__']]
+#ESTO LE VOY A CAMBIAR df_meta = df_meta[cols_orden + ['__RAW_DATA__']]
+# --- CÓDIGO SEGURO ANTI-ERRORES ---
+# Verificamos qué columnas realmente existen antes de intentar ordenarlas
+cols_existentes = [col for col in cols_orden if col in df_meta.columns]
+if '__RAW_DATA__' in df_meta.columns:
+    cols_existentes.append('__RAW_DATA__')
+df_meta = df_meta[cols_existentes]
+# ----------------------------------
 st.success(f"Archivo cargado: {len(df_meta)} probetas.")
 st.divider()
 
